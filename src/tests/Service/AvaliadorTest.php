@@ -1,11 +1,13 @@
 <?php 
 
-namespace LeilaoAlura;
+namespace Leilao\Tests\Service;
 
 require 'vendor/autoload.php';
 
 use PHPUnit\Framework\TestCase;
-use LeilaoAlura\Model\{Leilao, Lance, Usuario};
+use LeilaoAlura\Model\Leilao;
+use LeilaoAlura\Model\Lance;
+use LeilaoAlura\Model\Usuario;
 use LeilaoAlura\Service\Avaliador;
 
 class AvaliadorTest extends TestCase
