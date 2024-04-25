@@ -4,6 +4,7 @@ namespace Leilao\Tests\Service;
 
 require 'vendor/autoload.php';
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use LeilaoAlura\Model\Leilao;
 use LeilaoAlura\Model\Lance;
@@ -12,7 +13,8 @@ use LeilaoAlura\Service\Avaliador;
 
 class AvaliadorTest extends TestCase
 {
-    public function testAvaliadorDeveEncontrarMaiorValor()
+    #[DataProvider('entregaLeiloes')]
+    public function testAvaliadorDeveEncontrarMaiorValorDeLances(Leilao $leilao)
     {
         // Arrange - Given
         $leilao = $this->leilaoEmOrdemAleatoria();
@@ -44,38 +46,6 @@ class AvaliadorTest extends TestCase
         // Assert - Then
 
         self::assertEquals(1000, $menorValor);
-    }
-
-    public function testAvaliadorDeveEncontrarOMaiorValorDeLancesEmOrdemCrescente()
-    {
-        // Arrange - Given
-        $leilao = $this->leilaoEmOrdemCrescente();
-
-        $leiloeiro = new Avaliador();
-
-        // Act - When
-        $leiloeiro->avalia($leilao);
-
-        $maiorValor = $leiloeiro->getMaiorValor();
-
-        // Assert - Then
-        self::assertEquals(3500, $maiorValor);
-    }
-
-    public function testAvaliadorDeveEncontrarOMaiorValorDeLancesEmOrdemDecrescente()
-    {
-        // Arrange - Given
-        $leilao = $this->leilaoEmOrdemDecrescente();
-
-        $leiloeiro = new Avaliador();
-
-        // Act - When
-        $leiloeiro->avalia($leilao);
-
-        $maiorValor = $leiloeiro->getMaiorValor();
-
-        // Assert - Then
-        self::assertEquals(3500, $maiorValor);
     }
 
     public function testAvaliadorDeveEncontrarOMenorValorDeLancesEmOrdemDecrescente()
@@ -128,7 +98,7 @@ class AvaliadorTest extends TestCase
 
     //Métodos de criação de dados para os testes
 
-    public function leilaoEmOrdemCrescente() 
+    public static function leilaoEmOrdemCrescente() 
     {
         $leilao = new Leilao('Fiat 147 0km');
 
@@ -147,7 +117,7 @@ class AvaliadorTest extends TestCase
         return $leilao;
     }
 
-    public function leilaoEmOrdemDecrescente() 
+    public static function leilaoEmOrdemDecrescente() 
     {
         $leilao = new Leilao('Fiat 147 0km');
 
@@ -166,7 +136,7 @@ class AvaliadorTest extends TestCase
         return $leilao;
     }
 
-    public function leilaoEmOrdemAleatoria() 
+    public static function leilaoEmOrdemAleatoria() 
     {
         $leilao = new Leilao('Fiat 147 0km');
 
@@ -183,6 +153,15 @@ class AvaliadorTest extends TestCase
         $leilao->recebeLance(new Lance($jorge, 2500));
 
         return $leilao;
+    }
+
+    public static function entregaLeiloes()
+    {
+        return [
+            [self::leilaoEmOrdemAleatoria()],
+            [self::leilaoEmOrdemCrescente()],
+            [self::leilaoEmOrdemDecrescente()]
+        ];
     }
 
 }
