@@ -9,3 +9,7 @@ Avaliador (Leilao\Tests\Service\Avaliador)
  [x] Avaliador deve encontrar os tres maiores valores with data set #1
  [x] Avaliador deve encontrar os tres maiores valores with data set #2
 
+Leilao (Leilao\Tests\Model\Leilao)
+ [x] Leilao deve receber lances with data set "2-lances"
+ [x] Leilao deve receber lances with data set "1-lance"
+
