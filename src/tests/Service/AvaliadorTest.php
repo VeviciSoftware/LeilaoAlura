@@ -14,7 +14,7 @@ use LeilaoAlura\Service\Avaliador;
 class AvaliadorTest extends TestCase
 {
     private $leiloeiro;
-    public function criarAvaliador()
+    protected function setUp(): void
     {
         $this->leiloeiro = new Avaliador();
     }
@@ -26,8 +26,6 @@ class AvaliadorTest extends TestCase
         // Arrange - Given
         $leilao = $this->leilaoEmOrdemAleatoria();
 
-        $this->criarAvaliador();
-
         // Act - When
         $this->leiloeiro->avalia($leilao);
 
@@ -38,12 +36,11 @@ class AvaliadorTest extends TestCase
         self::assertEquals(3500, $maiorValor);
     }
 
+    #[DataProvider('entregaLeiloes')]
     public function testAvaliadorDeveEncontrarMenorValor()
     {
         // Arrange - Given
         $leilao = $this->leilaoEmOrdemAleatoria();
-
-        $this->criarAvaliador();
 
         // Act - When
         $this->leiloeiro->avalia($leilao);
@@ -55,11 +52,10 @@ class AvaliadorTest extends TestCase
         self::assertEquals(1000, $menorValor);
     }
 
+    #[DataProvider('entregaLeiloes')]
     public function testAvaliadorDeveEncontrarOsTresMaioresValores() 
     {
         $leilao = $this->leilaoEmOrdemAleatoria();
-
-        $this->criarAvaliador();
 
         $this->leiloeiro->avalia($leilao);
 

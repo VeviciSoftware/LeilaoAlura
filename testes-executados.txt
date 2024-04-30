@@ -1,0 +1,11 @@
+Avaliador (Leilao\Tests\Service\Avaliador)
+ [x] Avaliador deve encontrar maior valor de lances with data set #0
+ [x] Avaliador deve encontrar maior valor de lances with data set #1
+ [x] Avaliador deve encontrar maior valor de lances with data set #2
+ [x] Avaliador deve encontrar menor valor with data set #0
+ [x] Avaliador deve encontrar menor valor with data set #1
+ [x] Avaliador deve encontrar menor valor with data set #2
+ [x] Avaliador deve encontrar os tres maiores valores with data set #0
+ [x] Avaliador deve encontrar os tres maiores valores with data set #1
+ [x] Avaliador deve encontrar os tres maiores valores with data set #2
+

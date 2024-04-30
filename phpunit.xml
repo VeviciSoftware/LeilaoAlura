@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="vendor/autoload.php" colors="true" stopOnFailure="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.1/phpunit.xsd" cacheDirectory=".phpunit.cache">
+  <testsuites>
+    <testsuite name="Application Test Suite">
+      <directory>src/tests</directory>
+    </testsuite>
+  </testsuites>
+  <logging>
+    <testdoxText outputFile="testes-executados.txt"/>
+  </logging>
+  <source/>
+</phpunit>
