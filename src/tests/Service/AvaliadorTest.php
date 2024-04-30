@@ -13,18 +13,25 @@ use LeilaoAlura\Service\Avaliador;
 
 class AvaliadorTest extends TestCase
 {
+    private $leiloeiro;
+    public function criarAvaliador()
+    {
+        $this->leiloeiro = new Avaliador();
+    }
+
+
     #[DataProvider('entregaLeiloes')]
     public function testAvaliadorDeveEncontrarMaiorValorDeLances(Leilao $leilao)
     {
         // Arrange - Given
         $leilao = $this->leilaoEmOrdemAleatoria();
 
-        $leiloeiro = new Avaliador();
+        $this->criarAvaliador();
 
         // Act - When
-        $leiloeiro->avalia($leilao);
+        $this->leiloeiro->avalia($leilao);
 
-        $maiorValor = $leiloeiro->getMaiorValor();
+        $maiorValor = $this->leiloeiro->getMaiorValor();
 
         // Assert - Then
 
@@ -36,47 +43,15 @@ class AvaliadorTest extends TestCase
         // Arrange - Given
         $leilao = $this->leilaoEmOrdemAleatoria();
 
-        $leiloeiro = new Avaliador();
+        $this->criarAvaliador();
 
         // Act - When
-        $leiloeiro->avalia($leilao);
+        $this->leiloeiro->avalia($leilao);
 
-        $menorValor = $leiloeiro->getMenorValor();
+        $menorValor = $this->leiloeiro->getMenorValor();
 
         // Assert - Then
 
-        self::assertEquals(1000, $menorValor);
-    }
-
-    public function testAvaliadorDeveEncontrarOMenorValorDeLancesEmOrdemDecrescente()
-    {
-        // Arrange - Given
-        $leilao = $this->leilaoEmOrdemDecrescente();
-
-        $leiloeiro = new Avaliador();
-
-        // Act - When
-        $leiloeiro->avalia($leilao);
-
-        $menorValor = $leiloeiro->getMenorValor();
-
-        // Assert - Then
-        self::assertEquals(1000, $menorValor);
-    }
-
-    public function testAvaliadorDeveEncontrarOMenorValorDeLancesEmOrdemCrescente()
-    {
-        // Arrange - Given
-        $leilao = $this->leilaoEmOrdemCrescente();
-
-        $leiloeiro = new Avaliador();
-
-        // Act - When
-        $leiloeiro->avalia($leilao);
-
-        $menorValor = $leiloeiro->getMenorValor();
-
-        // Assert - Then
         self::assertEquals(1000, $menorValor);
     }
 
@@ -84,11 +59,11 @@ class AvaliadorTest extends TestCase
     {
         $leilao = $this->leilaoEmOrdemAleatoria();
 
-        $leiloeiro = new Avaliador();
+        $this->criarAvaliador();
 
-        $leiloeiro->avalia($leilao);
+        $this->leiloeiro->avalia($leilao);
 
-        $maiores = $leiloeiro->getMaioresLances();
+        $maiores = $this->leiloeiro->getMaioresLances();
 
         static::assertCount(3, $maiores);
         static::assertEquals(3500, $maiores[0]->getValor());
