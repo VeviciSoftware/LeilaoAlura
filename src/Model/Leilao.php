@@ -19,14 +19,14 @@ class Leilao
     {
         // Verifica se o último usuário é o mesmo que está tentando dar o lance (não pode dar dois lances seguidos
         if(!empty($this->lances) && $this->ehDoUltimoUsuario($lance)) {
-            return;
+            throw new \DomainException('Usuário não pode propor dois lances seguidos');
         }
 
         //Se o usuário já deu 5 lances, não pode dar mais lances
         $totalLancesPorUsuario = $this->totalDeLancesPorUsuario();
         $nomeUsuario = $lance->getUsuario()->getNome();
         if(!empty($totalLancesPorUsuario[$nomeUsuario]) && $totalLancesPorUsuario[$nomeUsuario] >= 5) {
-            return;
+            throw new \DomainException('Usuário não pode dar mais de 5 lances por leilão');
         }
 
         $this->lances[] = $lance;

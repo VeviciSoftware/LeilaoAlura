@@ -67,6 +67,16 @@ class AvaliadorTest extends TestCase
         static::assertEquals(2000, $maiores[2]->getValor());
     }
 
+    public function testLeilaoVazioNaoPodeSerAvaliado() 
+    {
+        $this->expectException(\DomainException::class);
+        $this->expectExceptionMessage('Não é possível avaliar um leilão vazio');
+
+        $leilao = new Leilao('Fusca Azul');
+
+        $this->leiloeiro->avalia($leilao);
+    }
+
     //Métodos de criação de dados para os testes
 
     public static function leilaoEmOrdemCrescente() 
