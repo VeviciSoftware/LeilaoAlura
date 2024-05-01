@@ -1,18 +1,3 @@
 Avaliador (Leilao\Tests\Service\Avaliador)
- [x] Avaliador deve encontrar maior valor de lances with data set #0
- [x] Avaliador deve encontrar maior valor de lances with data set #1
- [x] Avaliador deve encontrar maior valor de lances with data set #2
- [x] Avaliador deve encontrar menor valor with data set #0
- [x] Avaliador deve encontrar menor valor with data set #1
- [x] Avaliador deve encontrar menor valor with data set #2
- [x] Avaliador deve encontrar os tres maiores valores with data set #0
- [x] Avaliador deve encontrar os tres maiores valores with data set #1
- [x] Avaliador deve encontrar os tres maiores valores with data set #2
- [x] Leilao vazio nao pode ser avaliado
-
-Leilao (Leilao\Tests\Model\Leilao)
- [x] Leilao deve receber lances with data set "2-lances"
- [x] Leilao deve receber lances with data set "1-lance"
- [x] Leilao nao deve receber lances repetidos
- [x] Leilao nao deve aceitar mais de 5 lances por usuario
+ [x] Leilao finalizado nao pode receber lances
 

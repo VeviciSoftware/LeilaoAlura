@@ -9,6 +9,8 @@ class Leilao
     /** @var string */
     private $descricao;
 
+    private bool $finalizado = false;
+
     public function __construct(string $descricao)
     {
         $this->descricao = $descricao;
@@ -43,6 +45,17 @@ class Leilao
             }
         }
         return $totalLancesPorUsuario;
+    }
+
+    
+    public function finaliza() : void
+    {
+        $this->finalizado = true;
+    }
+
+    public function estaFinalizado() : bool
+    {
+        return $this->finalizado;
     }
 
     private function ehDoUltimoUsuario(Lance $lance): bool
