@@ -1,9 +1,9 @@
 <?php
 
-namespace Alura\Leilao\Dao;
+namespace LeilaoAlura\Dao;
 
-use Alura\Leilao\Infra\ConnectionCreator;
-use Alura\Leilao\Model\Leilao as ModelLeilao;
+use LeilaoAlura\Infra\ConnectionCreator;
+use LeilaoAlura\Model\Leilao as ModelLeilao;
 
 class Leilao
 {

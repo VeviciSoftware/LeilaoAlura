@@ -8,60 +8,41 @@ class Leilao
     private $lances;
     /** @var string */
     private $descricao;
+    /** @var bool */
+    private $finalizado;
+    /** @var \DateTimeInterface  */
+    private $dataInicio;
+    /** @var int */
+    private $id;
 
-    private bool $finalizado = false;
-
-    public function __construct(string $descricao)
+    public function __construct(string $descricao, \DateTimeImmutable $dataInicio = null, int $id = null)
     {
         $this->descricao = $descricao;
+        $this->finalizado = false;
         $this->lances = [];
+        $this->dataInicio = $dataInicio ?? new \DateTimeImmutable();
+        $this->id = $id;
     }
 
     public function recebeLance(Lance $lance)
     {
-        // Verifica se o último usuário é o mesmo que está tentando dar o lance (não pode dar dois lances seguidos
-        if(!empty($this->lances) && $this->ehDoUltimoUsuario($lance)) {
-            throw new \DomainException('Usuário não pode propor dois lances seguidos');
+        if ($this->finalizado) {
+            throw new \DomainException('Este leilão já está finalizado');
         }
 
-        //Se o usuário já deu 5 lances, não pode dar mais lances
-        $totalLancesPorUsuario = $this->totalDeLancesPorUsuario();
-        $nomeUsuario = $lance->getUsuario()->getNome();
-        if(!empty($totalLancesPorUsuario[$nomeUsuario]) && $totalLancesPorUsuario[$nomeUsuario] >= 5) {
-            throw new \DomainException('Usuário não pode dar mais de 5 lances por leilão');
+        $ultimoLance = empty($this->lances)
+            ? null
+            : $this->lances[count($this->lances) - 1];
+        if (!empty($this->lances) && $ultimoLance->getUsuario() == $lance->getUsuario()) {
+            throw new \DomainException('Usuário já deu o último lance');
         }
 
         $this->lances[] = $lance;
     }
 
-    public function totalDeLancesPorUsuario() {
-        $totalLancesPorUsuario = [];
-        foreach ($this->lances as $lance) {
-            $nomeUsuario = $lance->getUsuario()->getNome();
-            if(!isset($totalLancesPorUsuario[$nomeUsuario])) {
-                $totalLancesPorUsuario[$nomeUsuario] = 1;
-            } else {
-                $totalLancesPorUsuario[$nomeUsuario]++;
-            }
-        }
-        return $totalLancesPorUsuario;
-    }
-
-    
-    public function finaliza() : void
+    public function finaliza()
     {
         $this->finalizado = true;
-    }
-
-    public function estaFinalizado() : bool
-    {
-        return $this->finalizado;
-    }
-
-    private function ehDoUltimoUsuario(Lance $lance): bool
-    {
-        $ultimoLance = $this->lances[array_key_last($this->lances)];
-        return $lance->getUsuario() == $ultimoLance->getUsuario();
     }
 
     /**
@@ -70,5 +51,33 @@ class Leilao
     public function getLances(): array
     {
         return $this->lances;
+    }
+
+    public function recuperarDescricao(): string
+    {
+        return $this->descricao;
+    }
+
+    public function estaFinalizado(): bool
+    {
+        return $this->finalizado;
+    }
+
+    public function recuperarDataInicio(): \DateTimeInterface
+    {
+        return $this->dataInicio;
+    }
+
+    public function temMaisDeUmaSemana(): bool
+    {
+        $hoje = new \DateTime();
+        $intervalo = $this->dataInicio->diff($hoje);
+
+        return $intervalo->days > 7;
+    }
+
+    public function recuperarId(): int
+    {
+        return $this->id;
     }
 }
