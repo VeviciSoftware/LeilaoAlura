@@ -11,6 +11,7 @@ class Leilao
 
     public function __construct()
     {
+        var_dump('Construindo o DAO');
         $this->con = ConnectionCreator::getConnection();
     }
 

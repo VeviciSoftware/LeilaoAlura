@@ -8,31 +8,6 @@ use LeilaoAlura\Service\Encerrador;
 use LeilaoAlura\Dao\Leilao as LeilaoDao;
 
 
-class LeilaoDaoMock extends LeilaoDao {
-
-    private $leiloes = [];
-    public function salva(Leilao $leilao): void {
-        $this->leiloes[] = $leilao;
-
-    }
-
-    public function recuperarNaoFinalizados(): array {
-        return array_filter($this->leiloes, function (Leilao $leilao) {
-            return !$leilao->estaFinalizado();
-        });
-    }
-
-    public function recuperarFinalizados(): array {
-        return array_filter($this->leiloes, function (Leilao $leilao) {
-            return $leilao->estaFinalizado();
-        });
-    }
-
-    public function atualiza(Leilao $leilao): void {
-
-    }
-}
-
 class EncerradorTest extends TestCase {
     public function testLeiloesComMaisDeUmaSemanaDevemSerEncerrados() {
         $fiat147 = new Leilao('Fiat 147 0KM',
@@ -42,17 +17,25 @@ class EncerradorTest extends TestCase {
         $variante = new Leilao('Variant 1972 0KM',
             new \DateTimeImmutable('10 days ago'),
         );
+        //O método CreateMock cria um objeto que simula a classe LeilaoDao através de reflection
+        $leilaoDao = $this->createMock(LeilaoDao::class);
+        $leilaoDao->method('recuperarNaoFinalizados')
+            ->willReturn([$fiat147, $variante]);
+        $leilaoDao->method('recuperarFinalizados')
+            ->willReturn([$fiat147, $variante]);
 
-        $leilaoDao = new LeilaoDaoMock();
-        $leilaoDao->salva($fiat147);
-        $leilaoDao->salva($variante);
+        $leilaoDao->expects($this->exactly(2))
+            ->method('atualiza')
+            ->with($this->logicalOr($fiat147, $variante));
 
         $encerrador = new Encerrador($leilaoDao);
         $encerrador->encerra();
 
         //assert
-        $leiloes = $leilaoDao->recuperarFinalizados();
+        $leiloes = [$fiat147, $variante];
         static::assertCount(2, $leiloes);
+        self::assertTrue($leiloes[0]->estaFinalizado());
+        self::assertTrue($leiloes[1]->estaFinalizado());
         static::assertEquals('Fiat 147 0KM', $leiloes[0]->recuperarDescricao());
         static::assertEquals('Variant 1972 0KM', $leiloes[1]->recuperarDescricao());
     }
