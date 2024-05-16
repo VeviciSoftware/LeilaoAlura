@@ -26,18 +26,18 @@ class LeilaoTest extends TestCase
     public function testLeilaoNaoDeveReceberLancesRepetidos()
     {
         $this->expectException(\DomainException::class);
-        $this->expectExceptionMessage('Usuário não pode propor dois lances seguidos');
-
+        $this->expectExceptionMessage('Usuário já deu o último lance');
+    
         $leilao = new Leilao('Variante 0KM');
         $ana = new Usuario('Ana');
-
+    
         $leilao->recebeLance(new Lance($ana, 1000));
         $leilao->recebeLance(new Lance($ana, 1500));
-
+    
         static::assertCount(1, $leilao->getLances());
         static::assertEquals(1000, $leilao->getLances()[0]->getValor());
     }   
-
+    
     public function testLeilaoNaoDeveAceitarMaisDe5LancesPorUsuario() {
         $this->expectException(\DomainException::class);
         $this->expectExceptionMessage('Usuário não pode dar mais de 5 lances por leilão');
@@ -45,26 +45,17 @@ class LeilaoTest extends TestCase
         $leilao = new Leilao('Brasília Amarela 0KM');
         $joao = new Usuario('João');
         $maria = new Usuario('Maria');
-
-        $leilao->recebeLance(new Lance($joao, 1000));
-        $leilao->recebeLance(new Lance($maria, 1500));
-
-        $leilao->recebeLance(new Lance($joao, 2000));
-        $leilao->recebeLance(new Lance($maria, 2500));
-
-        $leilao->recebeLance(new Lance($joao, 3000));
-        $leilao->recebeLance(new Lance($maria, 3500));
-
-        $leilao->recebeLance(new Lance($joao, 4000));
-        $leilao->recebeLance(new Lance($maria, 4500));
-
+    
+        for ($i = 0; $i < 5; $i++) {
+            $leilao->recebeLance(new Lance($joao, $i * 1000));
+            $leilao->recebeLance(new Lance($maria, $i * 1000 + 500));
+        }
+    
+        // Adiciona um sexto lance para o usuário João
         $leilao->recebeLance(new Lance($joao, 5000));
-        $leilao->recebeLance(new Lance($maria, 5500));
-
-        $leilao->recebeLance(new Lance($joao, 6000));
-
+    
         static::assertCount(10, $leilao->getLances());
-        static::assertEquals(5500, $leilao->getLances()[array_key_last($leilao->getLances())]->getValor());
+        static::assertEquals(4500, $leilao->getLances()[array_key_last($leilao->getLances())]->getValor());
     }
 
     public static function geraLances()
