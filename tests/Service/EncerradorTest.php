@@ -6,38 +6,61 @@ use PHPUnit\Framework\TestCase;
 use LeilaoAlura\Model\Leilao;
 use LeilaoAlura\Service\Encerrador;
 use LeilaoAlura\Dao\Leilao as LeilaoDao;
+use LeilaoAlura\Service\EnviadorEmail;
 
 
 class EncerradorTest extends TestCase {
-    public function testLeiloesComMaisDeUmaSemanaDevemSerEncerrados() {
-        $fiat147 = new Leilao('Fiat 147 0KM',
-            new \DateTimeImmutable('8 days ago'),
-        );
+    private $encerrador;
+    private $enviadorEmail;
+    private $leilaoFiat147;
+    private $leilaoVariante;
 
-        $variante = new Leilao('Variant 1972 0KM',
+    protected function setUp(): void
+    {
+        $this->leilaoFiat147 = new Leilao('Fiat 147 0KM',
+        new \DateTimeImmutable('8 days ago'),
+        );
+    
+        $this->leilaoVariante = new Leilao('Variant 1972 0KM',
             new \DateTimeImmutable('10 days ago'),
         );
-        //O método CreateMock cria um objeto que simula a classe LeilaoDao através de reflection
+    
         $leilaoDao = $this->createMock(LeilaoDao::class);
         $leilaoDao->method('recuperarNaoFinalizados')
-            ->willReturn([$fiat147, $variante]);
+            ->willReturn([$this->leilaoFiat147, $this->leilaoVariante]);
         $leilaoDao->method('recuperarFinalizados')
-            ->willReturn([$fiat147, $variante]);
-
+            ->willReturn([$this->leilaoFiat147, $this->leilaoVariante]);
+    
         $leilaoDao->expects($this->exactly(2))
             ->method('atualiza')
-            ->with($this->logicalOr($fiat147, $variante));
-
-        $encerrador = new Encerrador($leilaoDao);
-        $encerrador->encerra();
+            ->with($this->logicalOr($this->leilaoFiat147, $this->leilaoVariante));
+    
+        $this->enviadorEmail = $this->createMock(EnviadorEmail::class);
+    
+        $this->encerrador = new Encerrador($leilaoDao, $this->enviadorEmail);
+    }
+    public function testLeiloesComMaisDeUmaSemanaDevemSerEncerrados() {
+        $this->encerrador->encerra();
 
         //assert
-        $leiloes = [$fiat147, $variante];
+        $leiloes = [$this->leilaoFiat147, $this->leilaoVariante];
         static::assertCount(2, $leiloes);
         self::assertTrue($leiloes[0]->estaFinalizado());
         self::assertTrue($leiloes[1]->estaFinalizado());
         static::assertEquals('Fiat 147 0KM', $leiloes[0]->recuperarDescricao());
         static::assertEquals('Variant 1972 0KM', $leiloes[1]->recuperarDescricao());
+    }
+
+    public function testDeveContinuarOProcessamentoAoEncontrarErroAoEnviarEmail() 
+    {
+        $e = new \DomainException('Erro ao enviar e-mail');
+
+        $this->enviadorEmail->expects($this->exactly(2))
+            ->method('notificadorTerminoLeilao')
+            ->willThrowException($e);
+        
+        $this->encerrador->encerra();
+
     }
 }
 
