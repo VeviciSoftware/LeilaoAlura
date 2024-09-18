@@ -9,13 +9,12 @@ class Leilao
 {
     private $con;
 
-    public function __construct()
+    public function __construct(\PDO $con)
     {
-        var_dump('Construindo o DAO');
-        $this->con = ConnectionCreator::getConnection();
+        $this->con = $con;
     }
 
-    public function salva(ModelLeilao $leilao): void
+    public function salva(ModelLeilao $leilao): ModelLeilao
     {
         $sql = 'INSERT INTO leiloes (descricao, finalizado, dataInicio) VALUES (?, ?, ?)';
         $stm = $this->con->prepare($sql);
@@ -23,6 +22,12 @@ class Leilao
         $stm->bindValue(2, $leilao->estaFinalizado(), \PDO::PARAM_BOOL);
         $stm->bindValue(3, $leilao->recuperarDataInicio()->format('Y-m-d'));
         $stm->execute();
+
+        return new ModelLeilao(
+            $leilao->recuperarDescricao(),
+            $leilao->recuperarDataInicio(),
+            $this->con->lastInsertId()
+        );
     }
 
     /**

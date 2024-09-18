@@ -1,6 +1,6 @@
 <?php
 
-namespace leilaoAlura\Infra;
+namespace LeilaoAlura\Infra;
 
 class ConnectionCreator
 {
