@@ -29,29 +29,14 @@ class Leilao
         if ($this->finalizado) {
             throw new \DomainException('Este leilão já está finalizado');
         }
-    
+
         $ultimoLance = empty($this->lances)
             ? null
             : $this->lances[count($this->lances) - 1];
         if (!empty($this->lances) && $ultimoLance->getUsuario() == $lance->getUsuario()) {
             throw new \DomainException('Usuário já deu o último lance');
         }
-    
-        $totalLancesUsuario = array_reduce(
-            $this->lances,
-            function (int $totalAcumulado, Lance $lanceAtual) use ($lance) {
-                if ($lanceAtual->getUsuario() == $lance->getUsuario()) {
-                    return $totalAcumulado + 1;
-                }
-                return $totalAcumulado;
-            },
-            0
-        );
-    
-        if ($totalLancesUsuario >= 5) {
-            throw new \DomainException('Usuário não pode dar mais de 5 lances por leilão');
-        }
-    
+
         $this->lances[] = $lance;
     }
 

@@ -26,11 +26,15 @@ class LeilaoDaoTest extends TestCase
         self::$pdo->beginTransaction();
     }
 
-    public function testInsercaoEBuscaDevemFuncionar()
+    public function testBuscaLeiloesNaoFinalizados()
     {
         // arrange
         $leilao = new Leilao('Variante 0Km');
         $leilaoDao = new LeilaoDao(self::$pdo);
+        $leilaoDao->salva($leilao);
+
+        $leilao = new Leilao('Fusca 1972');
+        $leilao->finaliza();
         $leilaoDao->salva($leilao);
 
         // act
@@ -49,4 +53,5 @@ class LeilaoDaoTest extends TestCase
     {
         self::$pdo->rollBack();
     }
+
 }
