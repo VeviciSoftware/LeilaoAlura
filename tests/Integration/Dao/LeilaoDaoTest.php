@@ -81,8 +81,14 @@ class LeilaoDaoTest extends TestCase
         $leilao = new Leilao('Brasília Amarela');
         $leilaoDao = new LeilaoDao(self::$pdo);
         $leilao = $leilaoDao->salva($leilao);
-        $leilao->finaliza();
 
+        //mid-test
+        $leiloes = $leilaoDao->recuperarNaoFinalizados();
+        self::assertCount(1, $leiloes);
+        self::assertSame('Brasília Amarela', $leiloes[0]->recuperarDescricao());
+        self::assertFalse($leiloes[0]->estaFinalizado());
+
+        $leilao->finaliza();
         //act
         $leilaoDao->atualiza($leilao);
 
