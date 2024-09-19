@@ -23,5 +23,6 @@ Leilao (Leilao\Tests\Model\Leilao)
  [x] Mesmo usuario nao pode propor dois lances seguidos
 
 Leilao Dao (LeilaoAlura\Integration\Dao\LeilaoDao)
- [x] Busca leiloes nao finalizados
+ [x] Busca leiloes nao finalizados with data set #0
+ [x] Busca leiloes finalizados with data set #0
 
