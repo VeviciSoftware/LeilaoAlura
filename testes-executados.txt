@@ -1,27 +1,3 @@
-Avaliador (Leilao\Tests\Service\Avaliador)
- [x] Avaliador deve encontrar maior valor de lances with data set #0
- [x] Avaliador deve encontrar maior valor de lances with data set #1
- [x] Avaliador deve encontrar maior valor de lances with data set #2
- [x] Avaliador deve encontrar menor valor with data set #0
- [x] Avaliador deve encontrar menor valor with data set #1
- [x] Avaliador deve encontrar menor valor with data set #2
- [x] Avaliador deve encontrar os tres maiores valores with data set #0
- [x] Avaliador deve encontrar os tres maiores valores with data set #1
- [x] Avaliador deve encontrar os tres maiores valores with data set #2
- [x] Leilao vazio nao pode ser avaliado
- [x] Leilao finalizado nao pode receber lances
-
-Encerrador (LeilaoAlura\Tests\Service\Encerrador)
- [x] Leiloes com mais de uma semana devem ser encerrados
- [x] Deve continuar o processamento ao encontrar erro ao enviar email
- [x] So deve enviar leilao por email apos finalizado
-
-Leilao (Leilao\Tests\Model\Leilao)
- [x] Propor lance em leilao finalizado deve lancar excecao
- [x] Propor lances em leilao deve funcionar with data set #0
- [x] Propor lances em leilao deve funcionar with data set #1
- [x] Mesmo usuario nao pode propor dois lances seguidos
-
 Leilao Dao (LeilaoAlura\Integration\Dao\LeilaoDao)
  [x] Busca leiloes nao finalizados with data set #0
  [x] Busca leiloes finalizados with data set #0
