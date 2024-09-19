@@ -25,4 +25,5 @@ Leilao (Leilao\Tests\Model\Leilao)
 Leilao Dao (LeilaoAlura\Integration\Dao\LeilaoDao)
  [x] Busca leiloes nao finalizados with data set #0
  [x] Busca leiloes finalizados with data set #0
+ [x] Ao atualizar leilao status deve ser alterado
 
